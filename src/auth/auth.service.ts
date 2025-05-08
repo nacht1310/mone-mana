@@ -4,10 +4,14 @@ import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterDto } from './dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
   async login(body: LoginDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -28,7 +32,14 @@ export class AuthService {
       throw new ForbiddenException('Invalid password');
     }
 
-    return 'Login successful';
+    const payload = {
+      email: existingUser.email,
+      sub: existingUser.id,
+    };
+
+    return await this.jwtService.signAsync(payload, {
+      expiresIn: '1h',
+    });
   }
 
   logout() {
