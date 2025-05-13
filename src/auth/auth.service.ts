@@ -1,10 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterDto } from './dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -40,10 +40,6 @@ export class AuthService {
     return await this.jwtService.signAsync(payload, {
       expiresIn: '1h',
     });
-  }
-
-  logout() {
-    return 'Logout successful';
   }
 
   async register(body: RegisterDto) {
