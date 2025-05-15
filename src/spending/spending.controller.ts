@@ -1,19 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Headers,
+  Query,
+} from '@nestjs/common';
 import { SpendingService } from './spending.service';
-import { CreateSpendingDto, UpdateSpendingDto } from './dto';
+import { CreateSpendingDto, QuerySpendingDto, UpdateSpendingDto } from './dto';
 
 @Controller('spending')
 export class SpendingController {
   constructor(private readonly spendingService: SpendingService) {}
 
   @Post()
-  create(@Body() createSpendingDto: CreateSpendingDto) {
-    return this.spendingService.create(createSpendingDto);
+  create(
+    @Body() createSpendingDto: CreateSpendingDto,
+    @Headers('userId') userId: string,
+  ) {
+    return this.spendingService.create(createSpendingDto, +userId);
   }
 
   @Get()
-  findAll() {
-    return this.spendingService.findAll();
+  findAll(@Query() queryParams: QuerySpendingDto ) {
+    return this.spendingService.findAll(queryParams);
   }
 
   @Get(':id')
@@ -22,7 +35,10 @@ export class SpendingController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSpendingDto: UpdateSpendingDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSpendingDto: UpdateSpendingDto,
+  ) {
     return this.spendingService.update(+id, updateSpendingDto);
   }
 
