@@ -3,6 +3,7 @@ import { CreateSpendingDto } from './dto/create-spending.dto';
 import { UpdateSpendingDto } from './dto/update-spending.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { QuerySpendingDto } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SpendingService {
@@ -12,6 +13,7 @@ export class SpendingService {
     const spending = this.prisma.spendingRecord.create({
       data: {
         ...createSpendingDto,
+        date: new Date(createSpendingDto.date),
         user: {
           connect: {
             id: userId,
@@ -35,10 +37,24 @@ export class SpendingService {
     const spendingList = this.prisma.spendingRecord.findMany({
       skip: size * page,
       take: size,
-      orderBy: [{ [sortField]: sortDirection }],
-      // where: {
-      //   ...filter,
-      // },
+      orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
+      where: {
+        category: {
+          in: filter.category ? filter.category : Prisma.skip,
+        },
+        AND: [
+          {
+            date: {
+              gte: filter.dateStart ? new Date(filter.dateStart) : Prisma.skip,
+            },
+          },
+          {
+            date: {
+              lte: filter.dateEnd ? new Date(filter.dateEnd) : Prisma.skip,
+            },
+          },
+        ],
+      },
     });
     return spendingList;
   }
@@ -64,6 +80,9 @@ export class SpendingService {
       },
       data: {
         ...updateSpendingDto,
+        date: updateSpendingDto.date
+          ? new Date(updateSpendingDto.date)
+          : Prisma.skip,
       },
     });
 

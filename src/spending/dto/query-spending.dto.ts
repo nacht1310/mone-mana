@@ -1,10 +1,39 @@
-import { SpendingRecord } from "@prisma/client";
+import { SpendingRecord } from '@prisma/client';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  
+} from 'class-validator';
 
-export interface QuerySpendingDto {
+export class QuerySpendingDto {
+  @IsOptional()
+  @IsArray()
   category?: Array<string>;
-  date?: number;
+
+  @IsOptional()
+  @IsNumber()
+  dateStart?: number;
+
+  @IsOptional()
+  @IsNumber()
+  dateEnd?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   page: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   size: number;
-  sortDirection: 'asc' | 'desc';
+
+  @IsOptional()
+  @IsString()
+  sortDirection?: 'asc' | 'desc';
+
+  @IsOptional()
+  @IsString()
   sortField: keyof SpendingRecord;
 }

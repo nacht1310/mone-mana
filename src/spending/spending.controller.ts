@@ -25,7 +25,8 @@ export class SpendingController {
   }
 
   @Get()
-  findAll(@Query() queryParams: QuerySpendingDto ) {
+  findAll(@Query() queryParams: QuerySpendingDto) {
+    console.log(queryParams)
     return this.spendingService.findAll(queryParams);
   }
 
