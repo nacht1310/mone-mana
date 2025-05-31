@@ -34,6 +34,7 @@ export class SpendingService {
     },
   ) {
     const { page, size, sortDirection, sortField, ...filter } = queryParams;
+
     const spendingList = this.prisma.spendingRecord.findMany({
       skip: size * page,
       take: size,
@@ -45,12 +46,12 @@ export class SpendingService {
         AND: [
           {
             date: {
-              gte: filter.dateStart ? new Date(filter.dateStart) : Prisma.skip,
+              gte: filter.dateStart ? filter.dateStart : Prisma.skip,
             },
           },
           {
             date: {
-              lte: filter.dateEnd ? new Date(filter.dateEnd) : Prisma.skip,
+              lte: filter.dateEnd ? filter.dateEnd : Prisma.skip,
             },
           },
         ],

@@ -30,12 +30,12 @@ export class SpendingController {
     return this.spendingService.findAll(queryParams);
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.spendingService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(
     @Param('id') id: string,
     @Body() updateSpendingDto: UpdateSpendingDto,
@@ -43,7 +43,7 @@ export class SpendingController {
     return this.spendingService.update(+id, updateSpendingDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
     return this.spendingService.remove(+id);
   }

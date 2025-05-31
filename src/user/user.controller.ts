@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('profile')
+  @Get('/profile')
   getUserProfile(@Body('userId') userId: number) {
     return this.userService.getUserProfile(userId);
   }

@@ -5,28 +5,33 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  
 } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export class QuerySpendingDto {
   @IsOptional()
   @IsArray()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') return value.split(',').map((v) => v.trim());
+    return [];
+  })
   category?: Array<string>;
 
   @IsOptional()
-  @IsNumber()
-  dateStart?: number;
+  @Transform(({ value }) => (value != null ? new Date(+value) : undefined))
+  dateStart?: Date;
 
   @IsOptional()
-  @IsNumber()
-  dateEnd?: number;
+  @Transform(({ value }) => (value != null ? new Date(+value) : undefined))
+  dateEnd?: Date;
 
   @IsNotEmpty()
-  @IsNumber()
+  @Type(() => Number)
   page: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @Type(() => Number)
   size: number;
 
   @IsOptional()
