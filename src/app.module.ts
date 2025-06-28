@@ -6,6 +6,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { NecordModule } from 'necord';
+import { IntentsBitField } from 'discord.js';
+import { DiscordModule } from './discord/discord.module';
 
 @Module({
   imports: [
@@ -18,6 +21,11 @@ import { AuthGuard } from './guards/auth/auth.guard';
       secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '1h' },
     }),
+    NecordModule.forRoot({
+      token: process.env.DISCORD_BOT_TOKEN || '',
+      intents: [IntentsBitField.Flags.DirectMessages],
+    }),
+    DiscordModule,
   ],
   controllers: [],
   providers: [
