@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ActionRowBuilder, ButtonBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { Context, SlashCommand, SlashCommandContext } from 'necord';
+import { Public } from 'src/global/decorator';
 
+@Public()
 @Injectable()
 export class CommandService {
   @SlashCommand({
@@ -14,8 +16,14 @@ export class CommandService {
         "First let's login to your account.\nIf you haven't had an account, please create one!",
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents([
-          new ButtonBuilder().setCustomId('Register'),
-          new ButtonBuilder().setCustomId('Login'),
+          new ButtonBuilder()
+            .setCustomId('Register')
+            .setLabel('Register')
+            .setStyle(ButtonStyle.Primary),
+          new ButtonBuilder()
+            .setCustomId('Login')
+            .setLabel('Login')
+            .setStyle(ButtonStyle.Primary),
         ]),
       ],
     });

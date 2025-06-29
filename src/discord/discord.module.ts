@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DiscordService } from './discord.service';
-import { ComponentService } from './component/component.service';
-import { CommandService } from './command/command.service';
+import { ComponentService } from './component/login.component';
+import { CommandService } from './command/login.command';
 
 @Module({
   providers: [DiscordService, ComponentService, CommandService],

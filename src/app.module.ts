@@ -24,6 +24,7 @@ import { DiscordModule } from './discord/discord.module';
     NecordModule.forRoot({
       token: process.env.DISCORD_BOT_TOKEN || '',
       intents: [IntentsBitField.Flags.DirectMessages],
+      development: [process.env.DISCORD_DEVELOPMENT_GUILD_ID || ''],
     }),
     DiscordModule,
   ],
