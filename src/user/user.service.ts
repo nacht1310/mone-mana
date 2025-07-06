@@ -1,8 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SetUpDiscordUserDto } from './dto/setup-user.dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
