@@ -9,8 +9,8 @@ import { Prisma } from '@prisma/client';
 export class SpendingService {
   constructor(private prisma: PrismaService) {}
 
-  create(createSpendingDto: CreateSpendingDto, userId: number) {
-    const spending = this.prisma.spendingRecord.create({
+  async create(createSpendingDto: CreateSpendingDto, userId: number) {
+    const spending = await this.prisma.spendingRecord.create({
       data: {
         ...createSpendingDto,
         date: new Date(createSpendingDto.date),
@@ -25,7 +25,7 @@ export class SpendingService {
     return spending;
   }
 
-  findAll(
+  async findAll(
     queryParams: QuerySpendingDto = {
       page: 0,
       size: 10,
@@ -35,7 +35,7 @@ export class SpendingService {
   ) {
     const { page, size, sortDirection, sortField, ...filter } = queryParams;
 
-    const spendingList = this.prisma.spendingRecord.findMany({
+    const spendingList = await this.prisma.spendingRecord.findMany({
       skip: size * page,
       take: size,
       orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
@@ -60,8 +60,8 @@ export class SpendingService {
     return spendingList;
   }
 
-  findOne(id: number) {
-    const spending = this.prisma.spendingRecord.findUnique({
+  async findOne(id: number) {
+    const spending = await this.prisma.spendingRecord.findUnique({
       where: {
         id,
       },
@@ -74,8 +74,8 @@ export class SpendingService {
     return spending;
   }
 
-  update(id: number, updateSpendingDto: UpdateSpendingDto) {
-    const spending = this.prisma.spendingRecord.update({
+  async update(id: number, updateSpendingDto: UpdateSpendingDto) {
+    const spending = await this.prisma.spendingRecord.update({
       where: {
         id,
       },
@@ -94,8 +94,8 @@ export class SpendingService {
     return spending;
   }
 
-  remove(id: number) {
-    const spending = this.prisma.spendingRecord.delete({
+  async remove(id: number) {
+    const spending = await this.prisma.spendingRecord.delete({
       where: {
         id,
       },

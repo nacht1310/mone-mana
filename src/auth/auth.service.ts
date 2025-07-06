@@ -23,6 +23,12 @@ export class AuthService {
       throw new ForbiddenException('User not found');
     }
 
+    if (!existingUser.hashedPassword) {
+      throw new ForbiddenException(
+        'User is setup in discord. Please move to discord to use our bot!',
+      );
+    }
+
     const passwordMatches = await argon.verify(
       existingUser.hashedPassword,
       body.password,
