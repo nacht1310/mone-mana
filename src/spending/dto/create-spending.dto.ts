@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsNumberString, IsPositive, IsString } from 'class-validator';
 
 export class CreateSpendingDto {
   @IsNotEmpty()
@@ -16,6 +16,6 @@ export class CreateSpendingDto {
   date: number;
 
   @IsNotEmpty()
-  @IsString()
-  category: string;
+  @IsNumberString()
+  categoryId: number;
 }

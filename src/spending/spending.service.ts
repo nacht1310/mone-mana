@@ -4,6 +4,7 @@ import { UpdateSpendingDto } from './dto/update-spending.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { QuerySpendingDto } from './dto';
 import { Prisma } from '@prisma/client';
+import { categories } from 'src/global/app.const';
 
 @Injectable()
 export class SpendingService {
@@ -40,9 +41,10 @@ export class SpendingService {
       take: size,
       orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
       where: {
-        category: {
-          in: filter.category ? filter.category : Prisma.skip,
+        categoryId: {
+          in: filter.categoryIds ? filter.categoryIds : Prisma.skip,
         },
+        userId: filter.userId,
         AND: [
           {
             date: {

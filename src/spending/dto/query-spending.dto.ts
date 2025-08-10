@@ -3,6 +3,7 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -13,10 +14,14 @@ export class QuerySpendingDto {
   @IsArray()
   @Transform(({ value }) => {
     if (Array.isArray(value)) return value;
-    if (typeof value === 'string') return value.split(',').map((v) => v.trim());
     return [];
   })
-  category?: Array<string>;
+  categoryIds?: Array<number>;
+
+  @IsOptional()
+  @IsNumberString()
+  userId?: number;
+
 
   @IsOptional()
   @Transform(({ value }) => (value != null ? new Date(+value) : undefined))
