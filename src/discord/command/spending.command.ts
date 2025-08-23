@@ -7,6 +7,7 @@ import {
   DeleteSpendingCommandDTO,
   EditSpendingCommandDTO,
 } from './command.dto';
+import { ActionRowBuilder, StringSelectMenuBuilder } from 'discord.js';
 
 @Public()
 @Injectable()
@@ -21,8 +22,32 @@ export class SpendingCommandService {
     @Context() [interactions]: SlashCommandContext,
     @Options() options: AddSpendingCommandDTO,
   ) {
+    const categories = await this._discordService.getAllCategories();
+    const categoryMap = await this._discordService.recommendCategory(
+      options.description,
+    );
+
+    const mostRecommendCategoryId = [...categoryMap.entries()].reduce(
+      (prev, current) => (prev[1] > current[1] ? prev : current),
+    );
+
     return interactions.reply({
-      content: '',
+      components: [
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
+          new StringSelectMenuBuilder()
+            .setCustomId('CATEGORY_SELECT') // replace with your customId
+            .setPlaceholder('Select your category')
+            .setMaxValues(1)
+            .setMinValues(1)
+            .setOptions([
+              ...categories.map((value) => ({
+                label: value.name,
+                value: value.id.toString(),
+                default: value.id === mostRecommendCategoryId[0],
+              })),
+            ]),
+        ]),
+      ],
     });
   }
 

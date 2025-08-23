@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Context, Modal, ModalContext } from 'necord';
+import { Context, Modal, ModalContext, SelectedStrings, StringSelect, StringSelectContext } from 'necord';
 import { UserService } from 'src/user/user.service';
 import { DiscordService } from '../discord.service';
 
@@ -21,5 +21,12 @@ export class SetUpComponentService {
     return interactions.reply({
       content: message,
     });
+  }
+
+  @StringSelect('CATEGORY_SELECT')
+  public async onCategorySelect(@Context() [interactions]: StringSelectContext, @SelectedStrings() selectedString: Array<string>) {
+    interactions.reply({
+      content: `You have selected this value: ${selectedString.join(', ')}`
+    })
   }
 }
