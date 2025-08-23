@@ -9,6 +9,7 @@ import { AuthGuard } from './guards/auth/auth.guard';
 import { NecordModule } from 'necord';
 import { IntentsBitField } from 'discord.js';
 import { DiscordModule } from './discord/discord.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { DiscordModule } from './discord/discord.module';
       development: [process.env.DISCORD_DEVELOPMENT_GUILD_ID || ''],
     }),
     DiscordModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [

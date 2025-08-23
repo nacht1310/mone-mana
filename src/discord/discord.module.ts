@@ -5,9 +5,10 @@ import { SetUpCommandService } from './command/setup.command';
 import { UserModule } from 'src/user/user.module';
 import { SpendingCommandService } from './command/spending.command';
 import { SpendingModule } from 'src/spending/spending.module';
+import { CategoryModule } from 'src/category/category.module';
 
 @Module({
   providers: [DiscordService, SetUpComponentService, SetUpCommandService, SpendingCommandService],
-  imports: [UserModule, SpendingModule],
+  imports: [UserModule, SpendingModule, CategoryModule],
 })
 export class DiscordModule {}
