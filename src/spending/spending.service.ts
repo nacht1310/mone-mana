@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { QuerySpendingDto } from './dto';
 import { CreateSpendingDto } from './dto/create-spending.dto';
 import { UpdateSpendingDto } from './dto/update-spending.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class SpendingService {
@@ -62,50 +67,59 @@ export class SpendingService {
   }
 
   async findOne(id: number) {
-    const spending = await this.prisma.spendingRecord.findUnique({
-      where: {
-        id,
-      },
-    });
+    try {
+      const spending = await this.prisma.spendingRecord.findUniqueOrThrow({
+        where: {
+          id,
+        },
+      });
 
-    if (!spending) {
-      throw new Error('Spending not found');
+      return spending;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException();
     }
-
-    return spending;
   }
 
   async update(id: number, updateSpendingDto: UpdateSpendingDto) {
-    const spending = await this.prisma.spendingRecord.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateSpendingDto,
-        date: updateSpendingDto.date
-          ? new Date(updateSpendingDto.date)
-          : Prisma.skip,
-      },
-    });
+    try {
+      const spending = await this.prisma.spendingRecord.update({
+        where: {
+          id,
+        },
+        data: {
+          ...updateSpendingDto,
+          date: updateSpendingDto.date
+            ? new Date(updateSpendingDto.date)
+            : Prisma.skip,
+        },
+      });
 
-    if (!spending) {
-      throw new Error('Spending not found');
+      return spending;
+    } catch (error) {
+      if (error.code === 404) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException();
     }
-
-    return spending;
   }
 
   async remove(id: number) {
-    const spending = await this.prisma.spendingRecord.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      const spending = await this.prisma.spendingRecord.delete({
+        where: {
+          id,
+        },
+      });
 
-    if (!spending) {
-      throw new Error('Spending is not found');
+      return spending;
+    } catch (error) {
+      if (error.code === 404) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException();
     }
-
-    return spending;
   }
 }

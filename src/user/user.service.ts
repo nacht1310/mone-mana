@@ -1,6 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SetUpDiscordUserDto } from './dto/setup-user.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UserService {
@@ -8,20 +13,23 @@ export class UserService {
 
   // This is a placeholder for the actual user profile retrieval logic.
   async getUserProfile(userId: number) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      omit: {
-        hashedPassword: true,
-      },
-    });
+    try {
+      const user = await this.prisma.user.findUniqueOrThrow({
+        where: {
+          id: userId,
+        },
+        omit: {
+          hashedPassword: true,
+        },
+      });
 
-    if (!user) {
-      throw new ForbiddenException('User not found');
+      return user;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new NotFoundException('User not found');
     }
-
-    return user;
   }
 
   async setupDiscordUserProfile(user: SetUpDiscordUserDto) {
