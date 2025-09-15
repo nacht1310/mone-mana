@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { SpendingModule } from './spending/spending.module';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { SpendingModule } from './modules/spending/spending.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
+import { PrismaModule } from './common/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './guards/auth/auth.guard';
+import { AuthGuard } from './common/guards/auth/auth.guard';
 import { NecordModule } from 'necord';
 import { IntentsBitField } from 'discord.js';
-import { DiscordModule } from './discord/discord.module';
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { CategoryModule } from './category/category.module';
       intents: [IntentsBitField.Flags.DirectMessages],
       development: [process.env.DISCORD_DEVELOPMENT_GUILD_ID || ''],
     }),
-    DiscordModule,
     CategoryModule,
   ],
   controllers: [],

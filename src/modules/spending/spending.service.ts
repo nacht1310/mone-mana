@@ -4,10 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { QuerySpendingDto } from './dto';
-import { CreateSpendingDto } from './dto/create-spending.dto';
-import { UpdateSpendingDto } from './dto/update-spending.dto';
+import { PrismaService } from 'src/common/prisma/prisma.service';
+import {
+  CreateSpendingDto,
+  QuerySpendingDto,
+  UpdateSpendingDto,
+} from './spending.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()

@@ -1,12 +1,23 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class SetUpDiscordUserDto {
+export class LoginDto {
+  @IsEmail()
   @IsNotEmpty()
-  discordId: string;
+  email: string;
 
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
+export class RegisterDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 
   @IsString()
   firstName: string;

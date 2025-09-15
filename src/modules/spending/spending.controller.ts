@@ -10,7 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { SpendingService } from './spending.service';
-import { CreateSpendingDto, QuerySpendingDto, UpdateSpendingDto } from './dto';
+import {
+  CreateSpendingDto,
+  QuerySpendingDto,
+  UpdateSpendingDto,
+} from './spending.dto';
 
 @Controller('spending')
 export class SpendingController {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
@@ -18,10 +18,7 @@ export class CategoryService {
     for (const category of categories) {
       let count = 0;
 
-      const regExp = new RegExp(
-        `\\b(${category.keywords.join('|')})\\b`,
-        'gi',
-      );
+      const regExp = new RegExp(`\\b(${category.keywords.join('|')})\\b`, 'gi');
       count = description.match(regExp)?.length || 0;
 
       categoryMap.set(category.id, count);
