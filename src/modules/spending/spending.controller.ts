@@ -20,7 +20,7 @@ import {
 export class SpendingController {
   constructor(private readonly spendingService: SpendingService) {}
 
-  @Post()
+  @Post('/create')
   create(
     @Body() createSpendingDto: CreateSpendingDto,
     @Headers('userId') userId: string,
@@ -28,7 +28,7 @@ export class SpendingController {
     return this.spendingService.create(createSpendingDto, +userId);
   }
 
-  @Get()
+  @Get('/all')
   findAll(@Query() queryParams: QuerySpendingDto) {
     return this.spendingService.findAll(queryParams);
   }

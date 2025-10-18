@@ -5,12 +5,12 @@ import { CategoryService } from './category.service';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.categoryService.getAllCategories();
   }
 
-  @Get()
+  @Get('/recommended')
   recommendCategory(@Query() queryParams: { description: string }) {
     return this.categoryService.recommendCategory(queryParams.description);
   }
