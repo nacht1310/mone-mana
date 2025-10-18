@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as argon from 'argon2';
@@ -14,12 +19,12 @@ export class AuthService {
   async login(body: LoginDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
-        email: body.email,
+        userName: body.userName,
       },
     });
 
     if (!existingUser) {
-      throw new ForbiddenException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     if (!existingUser.hashedPassword) {
@@ -34,11 +39,11 @@ export class AuthService {
     );
 
     if (!passwordMatches) {
-      throw new ForbiddenException('Invalid password');
+      throw new UnauthorizedException('Invalid password');
     }
 
     const payload = {
-      email: existingUser.email,
+      userName: existingUser.userName,
       sub: existingUser.id,
     };
 

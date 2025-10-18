@@ -17,7 +17,7 @@ datasource db {
 model User {
   id              Int              @id @default(autoincrement())
   discordId       String?
-  email           String           @unique
+  userName        String           @unique
   hashedPassword  String?
   firstName       String?
   lastName        String?
