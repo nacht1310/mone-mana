@@ -47,9 +47,11 @@ export class AuthService {
       sub: existingUser.id,
     };
 
-    return await this.jwtService.signAsync(payload, {
-      expiresIn: '1h',
-    });
+    return {
+      token: await this.jwtService.signAsync(payload, {
+        expiresIn: '1h',
+      }),
+    };
   }
 
   async register(body: RegisterDto) {
