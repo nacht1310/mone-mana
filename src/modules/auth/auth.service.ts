@@ -77,6 +77,6 @@ export class AuthService {
       throw error;
     }
 
-    return 'Create user successful';
+    return { message: 'Create user successful' };
   }
 }
