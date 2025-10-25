@@ -28,9 +28,10 @@ export class SpendingController {
     return this.spendingService.create(createSpendingDto, +userId);
   }
 
-  @Get('/all')
-  findAll(@Query() queryParams: QuerySpendingDto) {
-    return this.spendingService.findAll(queryParams);
+  @Get('/list')
+  getList(@Query() queryParams: QuerySpendingDto) {
+    console.log('Query Params:', queryParams);
+    return this.spendingService.getList(queryParams);
   }
 
   @Get('/:id')

@@ -32,7 +32,7 @@ export class SpendingService {
     return spending;
   }
 
-  async findAll(
+  async getList(
     queryParams: QuerySpendingDto = {
       page: 0,
       size: 10,
