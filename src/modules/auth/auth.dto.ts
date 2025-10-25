@@ -17,9 +17,6 @@ export class RegisterDto {
   @IsString()
   password: string;
 
-  @IsString()
-  firstName: string;
-
-  @IsString()
-  lastName: string;
+  firstName?: string | null;
+  lastName?: string | null;
 }

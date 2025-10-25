@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -59,7 +61,7 @@ export class AuthService {
     const { password, ...userData } = body;
 
     try {
-      await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: {
           ...userData,
           hashedPassword: hash,
@@ -68,15 +70,14 @@ export class AuthService {
           hashedPassword: true,
         },
       });
+      return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw 'User already exists';
+          throw new ConflictException('User already exists');
         }
       }
       throw error;
     }
-
-    return { message: 'Create user successful' };
   }
 }
