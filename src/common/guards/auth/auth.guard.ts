@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { extractTokenFromHeader } from 'src/global/utility';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,7 +29,7 @@ export class AuthGuard implements CanActivate {
 
     // Get the request object from the context and extract the token from the Authorization header
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = extractTokenFromHeader(request);
 
     if (!token) {
       throw new UnauthorizedException(); // No token provided
@@ -40,7 +41,7 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
 
-      request.user = payload; // Attach user info to request object
+      request.userId = payload.sub;
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         throw new ForbiddenException('Token expired');
@@ -50,11 +51,5 @@ export class AuthGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  extractTokenFromHeader(request: Request): string | null {
-    const [type, token] = request.headers['authorization'].split(' ');
-
-    return type === 'Bearer' ? token : null;
   }
 }
