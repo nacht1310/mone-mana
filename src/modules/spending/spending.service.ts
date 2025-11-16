@@ -39,33 +39,46 @@ export class SpendingService {
       sortDirection: 'desc',
       sortField: 'date',
     },
+    userId: string,
   ) {
     const { page, size, sortDirection, sortField, ...filter } = queryParams;
+
+    const filterOptions = {
+      where: {
+        categoryId: {
+          in: filter.categoryIds ?? Prisma.skip,
+        },
+        userId: Number(userId) ?? Prisma.skip,
+        AND: [
+          {
+            date: {
+              gte: filter.dateStart ?? Prisma.skip,
+            },
+          },
+          {
+            date: {
+              lte: filter.dateEnd ?? Prisma.skip,
+            },
+          },
+        ],
+      },
+    };
 
     const spendingList = await this.prisma.spendingRecord.findMany({
       skip: size * page,
       take: size,
       orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
-      where: {
-        categoryId: {
-          in: filter.categoryIds ? filter.categoryIds : Prisma.skip,
-        },
-        userId: filter.userId,
-        AND: [
-          {
-            date: {
-              gte: filter.dateStart ? filter.dateStart : Prisma.skip,
-            },
-          },
-          {
-            date: {
-              lte: filter.dateEnd ? filter.dateEnd : Prisma.skip,
-            },
-          },
-        ],
-      },
+      ...filterOptions,
     });
-    return spendingList;
+    const totalCount = await this.prisma.spendingRecord.count(filterOptions);
+    return {
+      data: spendingList,
+      totalCount,
+      page,
+      size,
+      sortField,
+      sortDirection,
+    };
   }
 
   async findOne(id: number) {

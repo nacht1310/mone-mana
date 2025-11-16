@@ -6,8 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  Headers,
   Query,
+  Request,
 } from '@nestjs/common';
 import { SpendingService } from './spending.service';
 import {
@@ -21,17 +21,13 @@ export class SpendingController {
   constructor(private readonly spendingService: SpendingService) {}
 
   @Post('/create')
-  create(
-    @Body() createSpendingDto: CreateSpendingDto,
-    @Headers('userId') userId: string,
-  ) {
-    return this.spendingService.create(createSpendingDto, +userId);
+  create(@Body() createSpendingDto: CreateSpendingDto, @Request() request) {
+    return this.spendingService.create(createSpendingDto, request.userId);
   }
 
   @Get('/list')
-  getList(@Query() queryParams: QuerySpendingDto) {
-    console.log('Query Params:', queryParams);
-    return this.spendingService.getList(queryParams);
+  getList(@Query() queryParams: QuerySpendingDto, @Request() request) {
+    return this.spendingService.getList(queryParams, request.userId);
   }
 
   @Get('/:id')

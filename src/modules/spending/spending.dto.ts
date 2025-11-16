@@ -41,10 +41,6 @@ export class QuerySpendingDto {
   categoryIds?: Array<number>;
 
   @IsOptional()
-  @IsNumberString()
-  userId?: number;
-
-  @IsOptional()
   @Transform(({ value }) => (value != null ? new Date(+value) : undefined))
   dateStart?: Date;
 
