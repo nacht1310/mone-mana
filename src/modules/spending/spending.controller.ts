@@ -1,20 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
+  Put,
   Query,
   Request,
 } from '@nestjs/common';
-import { SpendingService } from './spending.service';
 import {
   CreateSpendingDto,
   QuerySpendingDto,
   UpdateSpendingDto,
 } from './spending.dto';
+import { SpendingService } from './spending.service';
 
 @Controller('spending')
 export class SpendingController {
@@ -35,7 +35,7 @@ export class SpendingController {
     return this.spendingService.findOne(+id);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
   update(
     @Param('id') id: string,
     @Body() updateSpendingDto: UpdateSpendingDto,

@@ -11,6 +11,7 @@ import {
   UpdateSpendingDto,
 } from './spending.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class SpendingService {
@@ -64,12 +65,17 @@ export class SpendingService {
       },
     };
 
-    const spendingList = await this.prisma.spendingRecord.findMany({
-      skip: size * page,
-      take: size,
-      orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
-      ...filterOptions,
-    });
+    const spendingList = (
+      await this.prisma.spendingRecord.findMany({
+        skip: size * page,
+        take: size,
+        orderBy: [{ [sortField ?? 'date']: sortDirection ?? 'desc' }],
+        ...filterOptions,
+      })
+    ).map((value) => ({
+      ...value,
+      date: DateTime.fromJSDate(value.date).toMillis(),
+    }));
     const totalCount = await this.prisma.spendingRecord.count(filterOptions);
     return {
       data: spendingList,
@@ -89,7 +95,10 @@ export class SpendingService {
         },
       });
 
-      return spending;
+      return {
+        ...spending,
+        date: DateTime.fromJSDate(spending.date).toMillis(),
+      };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw new NotFoundException(error.message);

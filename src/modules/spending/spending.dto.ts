@@ -12,13 +12,11 @@ import {
 import { Transform } from 'class-transformer';
 
 export class CreateSpendingDto {
-  @IsNotEmpty()
   @IsString()
   description: string;
 
   @IsNotEmpty()
   @IsNumber()
-  @IsPositive()
   amount: number;
 
   @IsNotEmpty()
@@ -27,7 +25,7 @@ export class CreateSpendingDto {
   date: number;
 
   @IsNotEmpty()
-  @IsNumberString()
+  @IsNumber()
   categoryId: number;
 }
 
@@ -69,14 +67,17 @@ export class UpdateSpendingDto {
   @IsString()
   description: string;
 
+  @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   amount: number;
 
+  @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   date?: number;
 
-  @IsString()
-  category: string;
+  @IsNotEmpty()
+  @IsNumber()
+  categoryId: number;
 }
